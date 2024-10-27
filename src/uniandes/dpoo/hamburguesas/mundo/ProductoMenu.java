@@ -14,7 +14,7 @@ public class ProductoMenu implements Producto
      * El precio base del producto, antes de que se le agreguen ingredientes adicionales
      */
     private int precioBase;
-
+    
     /**
      * Crea un nuevo producto con un nombre y un precio base
      * @param nombre
