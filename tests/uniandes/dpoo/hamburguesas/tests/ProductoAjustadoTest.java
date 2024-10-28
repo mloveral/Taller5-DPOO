@@ -49,7 +49,7 @@ public class ProductoAjustadoTest {
 	}
 	
 	@Test
-	void testGetNombre( )
+	void testGetNombreProductoAjustado( )
 	{
 		assertEquals(producto1.getNombre(), productoAjustado1.getNombre(), "El nombre del producto ajustado 1 no coincide con el esperado");
 		
@@ -59,7 +59,7 @@ public class ProductoAjustadoTest {
 	}
 	
 	@Test
-	void testGetPrecio( )
+	void testGetPrecioProductoAjustado( )
 	{
 		assertEquals(producto1.getPrecio(), productoAjustado1.getPrecio(), "El precio del producto ajustado 1 no coincide con el esperado");
 		
@@ -70,7 +70,7 @@ public class ProductoAjustadoTest {
 	
 	
 	@Test
-	void generarFactura( )
+	void testGenerarFacturaProductoAjustado( )
 	{
 		factura = producto1.getNombre() + "            " + producto1.getPrecio() + "\n";
 		assertEquals(factura, productoAjustado1.generarTextoFactura(), "La factura generada por el producto ajustado 1 no coincide con la esperada");

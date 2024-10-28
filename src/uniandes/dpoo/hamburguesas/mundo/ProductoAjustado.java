@@ -21,13 +21,6 @@ public class ProductoAjustado implements Producto
      * La lista de ingrediente que el usuario quiere eliminar.
      */
     private ArrayList<Ingrediente> eliminados;
-    
-    public static void main(String[] args) {
-    	ProductoMenu producto1 = new ProductoMenu("DPOO hamburguesa", 34000);
-    	ProductoAjustado p = new ProductoAjustado(producto1);
-    	
-    	System.out.println(p.generarTextoFactura());
-	}
 
     /**
      * Construye un nuevo producto ajustado a partir del producto base y sin modificaciones

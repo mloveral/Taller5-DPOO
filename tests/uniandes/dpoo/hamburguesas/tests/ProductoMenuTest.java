@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import uniandes.dpoo.hamburguesas.mundo.ProductoMenu;
@@ -33,7 +32,7 @@ public class ProductoMenuTest {
     }
 	
 	@Test
-	void testGetNombre( ) 
+	void testGetNombreProductoMenu( ) 
 	{
 		assertEquals("DPOO hamburguesa", producto1.getNombre(), "El nombre del producto 1 no coincide con el esperado");
 		
@@ -43,7 +42,7 @@ public class ProductoMenuTest {
 	}
 	
 	@Test
-	void testGetPrecio( ) 
+	void testGetPrecioProductoMenu( ) 
 	{
 		assertEquals(34000, producto1.getPrecio(), "El precio del producto 1 no coincide con el esperado");
 		
@@ -53,7 +52,7 @@ public class ProductoMenuTest {
 	}
 	
 	@Test
-	void testGenerarFactura( ) 
+	void testGenerarFacturaProductoMenu( ) 
 	{
 		factura = "DPOO hamburguesa\n" + "            " + 34000 + "\n";
 		assertEquals(factura, producto1.generarTextoFactura(), "La factura generada por el producto 1 no coincide con la esperada");
