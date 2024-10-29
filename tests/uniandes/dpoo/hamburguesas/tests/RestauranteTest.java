@@ -19,6 +19,8 @@ import org.junit.jupiter.api.io.TempDir;
 import uniandes.dpoo.hamburguesas.excepciones.HamburguesaException;
 import uniandes.dpoo.hamburguesas.excepciones.IngredienteRepetidoException;
 import uniandes.dpoo.hamburguesas.excepciones.NoHayPedidoEnCursoException;
+import uniandes.dpoo.hamburguesas.excepciones.ProductoFaltanteException;
+import uniandes.dpoo.hamburguesas.excepciones.ProductoRepetidoException;
 import uniandes.dpoo.hamburguesas.excepciones.YaHayUnPedidoEnCursoException;
 import uniandes.dpoo.hamburguesas.mundo.Combo;
 import uniandes.dpoo.hamburguesas.mundo.Ingrediente;
@@ -168,6 +170,12 @@ public class RestauranteTest {
 		 assertEquals(ingredientesEsperados, rest1.getIngredientes(), "El menu base obtenido no coinciden con el esperado");
 	}
 	
+	/**
+	 * Set up específico para la prueba de cargar información desde los archivos
+	 * de texto.
+	 * Crea listas con los objetos esperados que tiene que cargar desde el archivo
+	 * para luego hacer las assertions en los test de cargar información
+	 */
 	private void setUpCargarInfo()
 	{
 		menuEsperado = new ArrayList<ProductoMenu>( );
@@ -241,7 +249,7 @@ public class RestauranteTest {
 		
 		//Para ingredientes
 		
-		// Para mandar de una vez que no son lo mismo
+		// Para mirar si el tamaño de la lista esperada es el mismo que el de la obtenida
 		assertEquals(ingredientes.size(), ingredientesEsperados.size(), "La cantidad de ingredientes cargados no coincide con el esperado");
 		
 		Ingrediente i1;
@@ -254,6 +262,9 @@ public class RestauranteTest {
 			assertEquals(i2.getCostoAdicional(), i1.getCostoAdicional(), "Los ingredientes cargados no coinciden con los esperados");
 		}
 		
+		//Para productos del menu
+		
+		// Para mirar si el tamaño de la lista esperada es el mismo que el de la obtenida
 		assertEquals(menuEsperado.size(), menu.size(), "El tamaño del menu cargados no coincide con el esperado");
 		
 		
@@ -269,8 +280,7 @@ public class RestauranteTest {
 		
 		// Para combos;
 		
-		// Para mandar de una vez que no son lo mismo
-		System.out.println(combosEsperados.size());
+		// Para mirar si el tamaño de la lista esperada es el mismo que el de la obtenida
 		assertEquals(combosEsperados.size(), combos.size(), "La cantidad de combos cargados no coinciden con los esperados");
 		
 		Combo c1;
@@ -299,6 +309,7 @@ public class RestauranteTest {
 		
 		Files.copy(archivoIngredientes.toPath(), archivoTemporal.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
 		
+		// Repite un ingrediente en el archivo temporal
 		try (FileWriter writer = new FileWriter(archivoTemporal, true))
 		{
 			writer.write("\ntomate;1000");
@@ -306,6 +317,81 @@ public class RestauranteTest {
 		
 		assertThrows(IngredienteRepetidoException.class, 
 				()-> rest1.cargarInformacionRestaurante(archivoTemporal, archivoMenu, archivoCombos));
+		
+	}
+	
+	@Test
+	void testCargarMenuProductoRepetidoException() throws NumberFormatException, HamburguesaException, IOException
+	{
+		setUpCargarInfo();
+		
+		File archivoIngredientes = new File("tests/uniandes/dpoo/hamburguesas/tests/datosPrueba/ingredientes_test.txt");
+		File archivoMenu = new File("tests/uniandes/dpoo/hamburguesas/tests/datosPrueba/menu_test.txt");
+		File archivoCombos = new File("tests/uniandes/dpoo/hamburguesas/tests/datosPrueba/combos_test.txt");
+		
+		File archivoTemporal = File.createTempFile("menu_temp", ".txt");
+		archivoTemporal.deleteOnExit();
+		
+		// Repite un producto del menu en el archivo temporal
+		Files.copy(archivoMenu.toPath(), archivoTemporal.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+		
+		try (FileWriter writer = new FileWriter(archivoTemporal, true))
+		{
+			writer.write("\ncorral queso;16000");
+		}
+		
+		assertThrows(ProductoRepetidoException.class, 
+				()-> rest1.cargarInformacionRestaurante(archivoIngredientes, archivoTemporal, archivoCombos));
+		
+	}
+	
+	@Test
+	void testCargarCombosProductoRepetidoException() throws NumberFormatException, HamburguesaException, IOException
+	{
+		setUpCargarInfo();
+		
+		File archivoIngredientes = new File("tests/uniandes/dpoo/hamburguesas/tests/datosPrueba/ingredientes_test.txt");
+		File archivoMenu = new File("tests/uniandes/dpoo/hamburguesas/tests/datosPrueba/menu_test.txt");
+		File archivoCombos = new File("tests/uniandes/dpoo/hamburguesas/tests/datosPrueba/combos_test.txt");
+		
+		File archivoTemporal = File.createTempFile("combos_temp", ".txt");
+		archivoTemporal.deleteOnExit();
+		
+		Files.copy(archivoCombos.toPath(), archivoTemporal.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+		
+		// Repite un combo en el archivo temporal
+		try (FileWriter writer = new FileWriter(archivoTemporal, true))
+		{
+			writer.write("\ncombo corral;10%;corral;papas medianas;gaseosa");
+		}
+		
+		assertThrows(ProductoRepetidoException.class, 
+				()-> rest1.cargarInformacionRestaurante(archivoIngredientes, archivoMenu, archivoTemporal));
+		
+	}
+	
+	@Test
+	void testCargarCombosProductoFaltanteException() throws NumberFormatException, HamburguesaException, IOException
+	{
+		setUpCargarInfo();
+		
+		File archivoIngredientes = new File("tests/uniandes/dpoo/hamburguesas/tests/datosPrueba/ingredientes_test.txt");
+		File archivoMenu = new File("tests/uniandes/dpoo/hamburguesas/tests/datosPrueba/menu_test.txt");
+		File archivoCombos = new File("tests/uniandes/dpoo/hamburguesas/tests/datosPrueba/combos_test.txt");
+		
+		File archivoTemporal = File.createTempFile("combos_temp", ".txt");
+		archivoTemporal.deleteOnExit();
+		
+		Files.copy(archivoCombos.toPath(), archivoTemporal.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+		
+		// Añade un producto que no existe en el menu temporal al último combo
+		try (FileWriter writer = new FileWriter(archivoTemporal, true))
+		{
+			writer.write(";papas grandes");
+		}
+		
+		assertThrows(ProductoFaltanteException.class, 
+				()-> rest1.cargarInformacionRestaurante(archivoIngredientes, archivoMenu, archivoTemporal));
 		
 	}
 }
