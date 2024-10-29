@@ -36,7 +36,7 @@ public class RestauranteTest {
 	Pedido pedidoEnCurso;
 	String archivoFactura1;
 	String archivoFactura2;
-	private static final String CARPETA_FACTURAS = "./facturas/";
+	private static final String CARPETA_FACTURAS = "data/facturas/";
 	private static final String PREFIJO_FACTURAS = "factura_";
 	
 	//Para la prueba de cargar Información
@@ -139,7 +139,15 @@ public class RestauranteTest {
 		pedidoEnCurso = rest1.getPedidoEnCurso();
 		pedidosEsperados.add(pedidoEnCurso);
 		rest1.cerrarYGuardarPedido();
-		assertEquals(pedidosEsperados, rest1.getPedidos(), "Los pedidos cerrados obtenidos no coinciden con los esperados");
+		
+		//Compara el tamaño de las listas de pedidos
+		assertEquals(pedidosEsperados.size(), rest1.getPedidos().size(), "Los pedidos cerrados obtenidos no coinciden con los esperados");
+		
+		//Compara cada elemento de la lista de pedidos
+		for (int i = 0; i < pedidosEsperados.size(); i++)
+		{
+			assertEquals(pedidosEsperados.get(i), rest1.getPedidos().get(i), "Los pedidos cerrados obtenidos no coinciden con los esperados");
+		}
 		
 		//Prueba cerrando más de un pedido
 		rest1.iniciarPedido("Juana", "Javeriana");

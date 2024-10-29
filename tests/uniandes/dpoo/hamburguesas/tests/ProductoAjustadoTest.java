@@ -6,6 +6,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import uniandes.dpoo.hamburguesas.mundo.Ingrediente;
 import uniandes.dpoo.hamburguesas.mundo.ProductoAjustado;
 import uniandes.dpoo.hamburguesas.mundo.ProductoMenu;
 
@@ -69,7 +70,7 @@ public class ProductoAjustadoTest {
 	
 	
 	@Test
-	void testGenerarFacturaProductoAjustado( )
+	void testGenerarFacturaProductoAjustadoSinModificaciones( )
 	{
 		factura = producto1.getNombre() + "            " + producto1.getPrecio() + "\n";
 		assertEquals(factura, productoAjustado1.generarTextoFactura(), "La factura generada por el producto ajustado 1 no coincide con la esperada");
@@ -78,6 +79,37 @@ public class ProductoAjustadoTest {
 		assertEquals(factura, productoAjustado2.generarTextoFactura(), "La factura generada por el producto ajustado 2 no coincide con la esperada");
 		
 		factura = producto3.getNombre() + "            " + producto3.getPrecio() + "\n";
+		assertEquals(factura, productoAjustado3.generarTextoFactura(), "La factura generada por el producto ajustado 3 no coincide con la esperada");
+	}
+	
+	@Test
+	void testGenerarFacturaProductoAjustadoModificado( )
+	{
+		//Agregando un ingrediente
+		factura = producto1.getNombre();
+		factura += "    +tomate";
+		factura += "                1000";
+		factura += "            " + (producto1.getPrecio()+1000) + "\n";
+		Ingrediente ing = new Ingrediente("tomate", 1000);
+		productoAjustado1.agregarIngrediente(ing);
+		assertEquals(factura, productoAjustado1.generarTextoFactura(), "La factura generada por el producto ajustado 1 no coincide con la esperada");
+		
+		//Eliminando un ingrediente
+		factura = producto2.getNombre();
+		factura += "    -tomate";
+		factura += "            " + producto2.getPrecio() + "\n";
+		productoAjustado2.eliminarIngrediente(ing);
+		assertEquals(factura, productoAjustado2.generarTextoFactura(), "La factura generada por el producto ajustado 2 no coincide con la esperada");
+		
+		//Añadiendo y eliminando un ingrediente 
+		factura = producto3.getNombre();
+		factura += "    +tomate";
+		factura += "                1000";
+		factura += "    -queso";
+		factura += "            " + (producto3.getPrecio()+1000) + "\n";
+		productoAjustado3.agregarIngrediente(ing);
+		ing = new Ingrediente("queso", 1000);
+		productoAjustado3.eliminarIngrediente(ing);
 		assertEquals(factura, productoAjustado3.generarTextoFactura(), "La factura generada por el producto ajustado 3 no coincide con la esperada");
 	}
 }

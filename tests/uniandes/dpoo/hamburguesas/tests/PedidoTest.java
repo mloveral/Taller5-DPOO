@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import uniandes.dpoo.hamburguesas.mundo.Combo;
@@ -36,10 +37,13 @@ public class PedidoTest {
 	
 	private Producto productoParaAgregar;
 	private String factura;
+	private int idPedidoBase;
 	
 	@BeforeEach
 	void setUp ( ) throws Exception
 	{
+		Pedido pedidoBase = new Pedido("", "");
+		idPedidoBase = pedidoBase.getIdPedido();
 		pedido1 = new Pedido("Ivan", "La Candelaria");
 		pedido2 = new Pedido("Diego", "Villa de Leyva");
 		pedido3 = new Pedido("Sofia", "Cartagena");
@@ -60,11 +64,12 @@ public class PedidoTest {
 	}
 	
 	@Test
+	@Order(1)
 	void testGetID()
 	{
-		assertEquals(0, pedido1.getIdPedido(), "El id del pedido 1 no coincide con el esperado");
-		assertEquals(1, pedido2.getIdPedido(), "El id del pedido 2 no coincide con el esperado");
-		assertEquals(2, pedido3.getIdPedido(), "El id del pedido 3 no coincide con el esperado");
+		assertEquals(idPedidoBase + 1, pedido1.getIdPedido(), "El id del pedido 1 no coincide con el esperado");
+		assertEquals(idPedidoBase + 2, pedido2.getIdPedido(), "El id del pedido 2 no coincide con el esperado");
+		assertEquals(idPedidoBase + 3, pedido3.getIdPedido(), "El id del pedido 3 no coincide con el esperado");
 	}
 	
 	@Test
